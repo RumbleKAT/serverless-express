@@ -1,4 +1,3 @@
-
 <h2 align="center">Serverless Express by</h1>
 <p align="center">
   <a href="https://vendia.com">
@@ -10,6 +9,34 @@ Data sharing is hard. Data sharing between partners is even harder. That’s why
 </p>
 
 # Serverless Express
+## rumblekat Fork Version
+the LTS 4.10.4 version has root path redirecting error, so I added the additional code to solve this problem.
+
+In addition, Serverless Express basically don't allow lambda invoke to proxy lambda.
+there was a problem when serverless-warmup-plugin worked, so I added additional logic when warmup lambda invoke request come.
+if invoke lambda, especially serverless-plugin-warmup case will be routed **GET /serverless-plugin-warmup** 
+
+- AWS_WARM_UP
+
+~~~ js
+  if(event.source === 'serverless-plugin-warmup'){
+    event.requestContext = {};
+    event.path = '/serverless-plugin-warmup';
+    event.httpMethod = 'GET'
+    event.body = null;
+    return 'AWS_WARM_UP';
+  }
+~~~
+
+- Example 
+
+~~~ js
+  const router = express.Router();
+  router.get('/serverless-plugin-warmup',(req,res)=>{
+    res.send('success')
+  })
+  return router;
+~~~
 
 <p align="center">
   <a aria-label="Made by Vendia" href="https://vendia.com">
