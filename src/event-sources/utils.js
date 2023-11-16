@@ -77,6 +77,13 @@ function getMultiValueHeaders ({ headers }) {
 function getEventSourceNameBasedOnEvent ({
   event
 }) {
+  if (event.source === 'serverless-plugin-warmup') {
+    event.requestContext = {}
+    event.path = '/serverless-plugin-warmup'
+    event.httpMethod = 'GET'
+    event.body = null
+    return 'AWS_WARM_UP'
+  }
   if (event.requestContext && event.requestContext.elb) return 'AWS_ALB'
   if (event.Records) {
     const eventSource = event.Records[0] ? event.Records[0].EventSource || event.Records[0].eventSource : undefined

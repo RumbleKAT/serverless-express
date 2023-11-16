@@ -34,6 +34,8 @@ function getEventSource ({ eventSourceName }) {
       return awsEventBridgeEventSource
     case 'AWS_KINESIS_DATA_STREAM':
       return awsKinesisEventSource
+    case 'AWS_WARM_UP':
+      return awsApiGatewayV1EventSource
     default:
       throw new Error('Couldn\'t detect valid event source.')
   }
